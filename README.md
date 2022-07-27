@@ -10,3 +10,4 @@
 ### Run dev mode
 - Use `cd backend && npm run dev` to run *backend server* in **cmd**
 - Use `cd frontend && npm run dev` to run *frontend server* in **cmd**
+- Then you will see the chat at http://localhost:5173
