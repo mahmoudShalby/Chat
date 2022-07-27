@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Socket } from "socket.io-client"
   import Alert from "../Alert.svelte"
-  import { user } from '../../stores'
+  import { user, type IUser, app } from '../../stores'
   import AuthForm from "./AuthForm.svelte"
 
 
@@ -15,8 +15,10 @@
   let alert: alertT = { content: '', invisible: false }
 
   function submitHandler(authMode: string, username: string, password: string) {
-    if (username && password)
+    if (username && password) {
+      $app.isLoading = true
       socket.emit('auth', authMode, username, password)
+    }
     else {
       if (!username)
         alert = { content: 'Please enter a username', invisible: true }
@@ -25,14 +27,14 @@
     }
   }
 
-  socket.on('auth', data => {
-    console.log(data)
+  socket.on('auth', (data: [IUser, string]) => {
     if (typeof data === 'string')
       alert = { content: data, invisible: true }
     else {
       user.set(data[0])
       localStorage.setItem('token', data[1])
-      
+      $app.isAuthenticated = true
+      $app.isLoading = false
     }
   })
 </script>

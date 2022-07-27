@@ -28,7 +28,7 @@ const comparePassword = (newPassword: string, realPassword: string) => bcrypt.co
 // Socket server
 const io = new Server({
   cors: {
-    origin: 'http://localhost:5173',
+    origin: '*',
     methods: ['GET', 'POST']
   }
 })
@@ -36,7 +36,7 @@ const io = new Server({
 type decoded = { id: string }
 
 io.use(async (socket, next) => {
-  const token = socket.handshake.auth.token
+  const token = <string>socket.handshake.query.token
   if (token !== null) { 
     socket.data.user = await User.findById((<decoded>verifyToken(token)).id)
     socket.data.chats = socket.data.user ? await Chat.find({ 'users.username': socket.data.user.username }):[]

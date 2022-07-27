@@ -5,13 +5,14 @@
   import { user, app } from './stores'
 
 
-  const socket = io('http://localhost:7000', { auth: { token: localStorage.getItem('token') } })
+  const socket = io('http://localhost:7000', { query: { token: localStorage.getItem('token') } })
 
   socket.on('setup', data => {
     user.set(data.user)
-    if (data.user)
-    $app.isAuthenticated = true
-    $app.chats = data.chats
+    if (data.user.length) {
+      $app.isAuthenticated = true
+      $app.chats = data.chats
+    }
     console.log('\x1b[36muser:\x1b[m', data.user)
     console.log('\x1b[36mchats:\x1b[m', data.chats)
     $app.isLoading = false
