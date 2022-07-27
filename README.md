@@ -9,5 +9,4 @@
 
 ### Run dev mode
 1. Use `cd backend && npm run dev` to run *backend server* in **cmd**
-2. Use `cd frontend && npm run dev` to run *frontend server* in **cmd**
-3. Open http://localhost:5173 to see the app
+2. Use `cd frontend && npm run dev -- --open` to run *frontend server* in **cmd**
