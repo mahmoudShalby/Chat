@@ -7,6 +7,4 @@
 - **S** = Svelte
 - **N** = Nodejs
 
-### Run dev mode
-1. Use `cd backend && npm run dev` to run *backend server* in **cmd**
-2. Use `cd frontend && npm run dev -- --open` to run *frontend server* in **cmd**
+### To run dev mode just run **run.bat** file on your windows
