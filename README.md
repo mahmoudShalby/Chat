@@ -8,4 +8,4 @@
 - **N** = Nodejs
 
 ### dev mode
- just run `run.bat` file on your windows
+just run `run.bat` file on your windows
