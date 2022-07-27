@@ -7,4 +7,5 @@
 - **S** = Svelte
 - **N** = Nodejs
 
-### To run dev mode just run **run.bat** file on your windows
+### dev mode
+ just run `run.bat` file on your windows
