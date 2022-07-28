@@ -19,7 +19,7 @@ import type { IUser, IChat, IMessage } from './models'
 // JWT tools
 const SECRET_KEY = <string>process.env.SECRET_KEY
 const generateToken = (data: object) => jwt.sign(data, SECRET_KEY)
-const verifyToken = (token: string) => jwt.verify(token, SECRET_KEY)
+const verifyToken = (token: string | string[]) => jwt.verify(<string>token, SECRET_KEY)
 
 // Bcrypt tools
 const hashPassword = (data: string) => bcrypt.hashSync(data, 10)
@@ -36,9 +36,10 @@ const io = new Server({
 type decoded = { id: string }
 
 io.use(async (socket, next) => {
-  const token = <string>socket.handshake.query.token
-  if (token !== null) { 
-    socket.data.user = await User.findById((<decoded>verifyToken(token)).id)
+  const token = socket.handshake.query.token
+  if (token) {
+    console.log(`token: ${token} (${typeof token})`)
+    socket.data.user = await User.findById((<decoded><unknown>verifyToken(token)).id)
     socket.data.chats = socket.data.user ? await Chat.find({ 'users.username': socket.data.user.username }):[]
   }
   else {
@@ -47,8 +48,8 @@ io.use(async (socket, next) => {
   }
   next()
 })
-io.on('connection', (socket) => {
-  socket.emit('setup', socket.data)
+io.on('connection', socket => {
+  socket.emit('setup', { user: { username: socket.data.user.username }, chats: socket.data.chats })
 
   socket.on('auth', async (authMode: 'signup' | 'login', username: string, password: string) => {
     let data

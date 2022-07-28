@@ -5,11 +5,12 @@
   import { user, app } from './stores'
 
 
-  const socket = io('http://localhost:7000', { query: { token: localStorage.getItem('token') } })
+  const token = localStorage.getItem('token')
+  const socket = io('http://localhost:7000', token ? { query: { token } }:{})
 
   socket.on('setup', data => {
     user.set(data.user)
-    if (data.user.length) {
+    if (data.user) {
       $app.isAuthenticated = true
       $app.chats = data.chats
     }
