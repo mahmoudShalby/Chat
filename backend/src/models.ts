@@ -24,11 +24,13 @@ export const Message = model<IMessage>('Message', new Schema<IMessage>({
 }, { timestamps: true }))
 
 export interface IChat {
+  name: string
   users: Schema.Types.ObjectId[]
   messages: Schema.Types.ObjectId[]
 }
 
 export const Chat = model<IChat>('Chat', new Schema<IChat>({
+  name: String,
   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
 }))

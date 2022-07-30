@@ -2,7 +2,7 @@
   import { chat, user } from '../../../stores'
 
 
-  $: console.log($chat)
+  $: console.log('\x1b[36mchat:', $chat)
   $: if (!$chat.name && $chat.users.length) {
     if ($chat.users.length === 2)
       $chat.name = $chat.users[1] === $user ? $chat.users[2].username:$chat.users[1].username
@@ -29,6 +29,6 @@
     height: 100vh;
     display: grid;
     place-items: center;
-    font-size: 27px;
+    font-size: 38px;
   }
 </style>

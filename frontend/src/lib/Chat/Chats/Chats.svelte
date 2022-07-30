@@ -9,7 +9,7 @@
 
 <div>
   <SearchBar socket={socket} />
-  <ChatsList />
+  <ChatsList socket={socket} />
 </div>
 
 <style>

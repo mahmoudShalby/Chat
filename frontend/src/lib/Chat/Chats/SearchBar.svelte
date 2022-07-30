@@ -8,6 +8,8 @@
   $: $app.search = { value, mode: !!value }
   $: if ($app.search.mode)
     socket.emit('search', $app.search.value)
+  $: if (!$app.search.mode)
+    $app.chats = $app.realChats
 </script>
 
 <input type="text" bind:value placeholder="Search friends or groups">

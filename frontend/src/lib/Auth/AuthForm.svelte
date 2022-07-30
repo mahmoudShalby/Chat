@@ -6,10 +6,10 @@
   password: string
 </script>
 
-<form on:submit|preventDefault={() => submitHandler(authMode, username, password)} style={`--direction: ${authMode === 'signup' ? -1:1}`}>
+<form on:submit|preventDefault={() => submitHandler(authMode, username, password)}>
   <h1>{`${authMode[0].toUpperCase()}${authMode.substring(1)}`}</h1>
-  <input type="text" placeholder="username" bind:value={username}>
-  <input type="password" placeholder="password" bind:value={password}>
+  <input type="text" placeholder="username" bind:value={username} autocomplete="current-password">
+  <input type="password" placeholder="password" bind:value={password} autocomplete="current-password">
   <button type="submit">Go!</button>
 </form>
 
@@ -22,16 +22,6 @@
     min-width: 300px;
     padding: 7px 10px 10px;
     border-radius: 10px;
-    animation: in .3s;
-  }
-
-  @keyframes in {
-    0% {
-      transform: translateX(200px * var(--direction));
-    }
-    100% {
-      transform: translateX(0);
-    }
   }
 
   h1 {
@@ -39,19 +29,18 @@
   }
 
   input, button {
-    border-radius: 20px;
-    outline: none;
-    border: none;
+    border-radius: 15px;
   }
 
   input {
     width: 100%;
     padding: 0 10px;
     height: 30px;
-    transition: .3;
   }
 
   button {
+    outline: none;
+    border: none;
     margin-top: 3px;
     padding: 5px 10px;
     font-size: 16px;
@@ -63,5 +52,11 @@
 
   button:hover {
     background-color: #16a085;
+  }
+
+  @media (max-width: 320px) {
+    form {
+      min-width: 270px;
+    }
   }
 </style>

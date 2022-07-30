@@ -6,7 +6,7 @@
   invisible: boolean
   
   const close = () => invisible = false
-  onMount(() => setTimeout(close, 10000))
+  onMount(() => setTimeout(close, 5000))
 </script>
 
 {#if invisible}

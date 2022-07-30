@@ -1,46 +1,24 @@
 <script lang="ts">
   import type { Socket } from "socket.io-client"
-  import Alert from "../Alert.svelte"
-  import { user, type IUser, app } from '../../stores'
+  import { user, type IUser, app, type IChat, alert } from '../../stores'
   import AuthForm from "./AuthForm.svelte"
 
 
   export let socket: Socket
 
-  type alertT = {
-    content: string
-    invisible: boolean
-  }
-
-  let alert: alertT = { content: '', invisible: false }
-
   function submitHandler(authMode: string, username: string, password: string) {
     if (username && password) {
-      $app.isLoading = true
       socket.emit('auth', authMode, username, password)
     }
     else {
       if (!username)
-        alert = { content: 'Please enter a username', invisible: true }
+        alert.set({ content: 'Please enter a username', invisible: true })
       else if (!password)
-        alert = { content: 'Please enter a password', invisible: true }
+        alert.set({ content: 'Please enter a password', invisible: true })
     }
   }
-
-  socket.on('auth', (data: [IUser, string]) => {
-    if (typeof data === 'string')
-      alert = { content: data, invisible: true }
-    else {
-      user.set(data[0])
-      localStorage.setItem('token', data[1])
-      $app.isAuthenticated = true
-      $app.isLoading = false
-    }
-  })
 </script>
 
-
-<Alert bind:content={alert.content} bind:invisible={alert.invisible} />
 
 <div>
   <span>
@@ -67,4 +45,9 @@
     place-items: center;
   }
 
+  @media (max-width: 615px) {
+    div {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
