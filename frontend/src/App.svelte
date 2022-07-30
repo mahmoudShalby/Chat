@@ -31,7 +31,7 @@
   })
 
   socket.on('search result', (result: IChat[]) => {
-    // $app.chats = result
+    $app.chats = result
     console.log(result)
   })
 </script>

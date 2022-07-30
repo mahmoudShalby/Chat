@@ -18,5 +18,6 @@
     display: grid;
     place-items: center;
     grid-template-rows: 40px 1fr;
+    gap: 3px;
   }
 </style>

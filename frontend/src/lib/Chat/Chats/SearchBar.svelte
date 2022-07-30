@@ -4,10 +4,13 @@
 
   export let socket: Socket
 
-  let value: string
+  let value: string,
+  lastValue: string
   $: $app.search = { value, mode: !!value }
-  $: if ($app.search.mode)
+  $: if ($app.search.mode && value !== lastValue) {
     socket.emit('search', $app.search.value)
+    lastValue = value
+  }
   $: if (!$app.search.mode)
     $app.chats = $app.realChats
 </script>

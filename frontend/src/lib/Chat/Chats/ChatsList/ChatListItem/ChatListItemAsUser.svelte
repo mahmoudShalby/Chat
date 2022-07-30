@@ -9,10 +9,11 @@
   socketId: string
 
   function clickHandler() {
-    if ($app.search.mode) {
-      socket.emit('create room', { name: '', users: [$user, { username: name, socketId: socketId }] })
-    }
+    if ($app.search.mode)
+      socket.emit('create chat', { name: '', users: [$user, { username: name, socketId: socketId }] })
+    else
+      throw new Error('Put ChatListItemAsUser in chats without search mode')
   }
 </script>
 
-<ChatListItem socket={socket} name={name} />
+<ChatListItem socket={socket} name={name} on:click={clickHandler} />

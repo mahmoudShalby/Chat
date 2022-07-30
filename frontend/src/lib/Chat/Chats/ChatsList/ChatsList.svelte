@@ -9,15 +9,15 @@
 </script>
 
 {#if $app.chats.length}
-<div>
-  {#each $app.chats as chat}
-    {#if chat.socketId}
-      <ChatListItemAsUser socket={socket} {...chat} />
-    {:else}
-      <ChatListItemAsChat socket={socket} {...chat} />
-    {/if}
-  {/each}
-</div>
+  <div>
+    {#each $app.chats as chat}
+      {#if chat.socketId}
+        <ChatListItemAsUser socket={socket} {...chat} socketId={chat.socketId} />
+      {:else}
+        <ChatListItemAsChat socket={socket} {...chat} />
+      {/if}
+    {/each}
+  </div>
 {:else if $app.search.mode}
   <span>No result</span>
 {:else}
@@ -26,9 +26,12 @@
 
 <style>
   div {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    gap: 4px;
   }
 
   span {

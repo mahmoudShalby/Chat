@@ -15,7 +15,6 @@ db_connection.on('error', (err: any) => console.log('db connection error:', err)
 // Setup models
 import { User, Chat, Message } from './models'
 import type { IUser, IChat, IMessage } from './models'
-import { rawListeners } from 'process'
 
 // JWT tools
 const SECRET_KEY = <string>process.env.SECRET_KEY
@@ -55,9 +54,9 @@ io.use(async (socket, next) => {
   next()
 })
 io.on('connection', socket => {
-  socket.emit('setup', { user: { username: socket.data.user.username }, chats: socket.data.chats })
+  socket.emit('setup', { user: { username: socket.data.user.username, socketId: socket.id }, chats: socket.data.chats })
 
-  const getAuthResult = async () => ({ user: { username: socket.data.user.username }, chats: await getChatsByUsername(socket.data.user.username), token: generateToken({ id: socket.data.user._id })})
+  const getAuthResult = async () => ({ user: { username: socket.data.user.username, socketId: socket.id }, chats: await getChatsByUsername(socket.data.user.username), token: generateToken({ id: socket.data.user._id })})
   socket.on('auth', async (authMode: 'signup' | 'login', username: string, password: string) => {
     let data
     if (username && password) {
@@ -99,6 +98,17 @@ io.on('connection', socket => {
     let result: IChat[] = []
     users.forEach((user: IUser) => result.push(<IChat><unknown>{ name: user.username, socketId: user.socketId }))
     socket.emit('search result', result)
+  })
+
+  socket.on('create chat', async (data: { name: string, users: IUser[] }) => {
+    const firstUser = await User.findOne({ username: data.users[0].username })
+    const secondUser = await User.findOne({ username: data.users[1].username })
+    let result: IChat | null
+    if (firstUser && secondUser)
+      result = await Chat.create({ name: data.name, users: [firstUser._id, secondUser._id] })
+    else
+      result = null
+    socket.emit('chat created', result)
   })
 })
 

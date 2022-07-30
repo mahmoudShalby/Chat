@@ -47,10 +47,11 @@ export const user = writable(<IUser>{
 
 // Chat
 export interface IChat {
-socketId: any
   name: string
   users: IUser[]
   messages: IMessage[]
+  // For handle with ChatListItemAsUser
+  socketId?: any
 }
 
 export const chat = writable(<IChat>{
