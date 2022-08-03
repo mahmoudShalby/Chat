@@ -2,7 +2,7 @@
   import io from 'socket.io-client'
   import Auth from './lib/Auth/Auth.svelte'
   import Chat from './lib/Chat/Chat.svelte';
-  import { user, app, type IUser, type IChat, alert } from './stores'
+  import { user, app, type IUser, type IChat, alert, chat, type IMessage } from './stores'
   import Alert from "./lib/Alert.svelte"
 
 
@@ -22,9 +22,10 @@
 
   socket.on('auth', (data: { user: IUser, chats: IChat[], token: string } | string) => {
     if (typeof data === 'string')
-      alert.set({ content: data, invisible: true })
+    alert.set({ content: data, invisible: true })
     else {
       user.set(data.user)
+      console.log('\x1b[36muser:', data.user)
       localStorage.setItem('token', data.token)
       $app.isAuthenticated = true
     }
@@ -33,6 +34,12 @@
   socket.on('search result', (result: IChat[]) => {
     $app.chats = result
     console.log(result)
+  })
+
+  socket.on('chat created', (data: { _id: string, name: string, users: IUser[], messages: IMessage[] }) => {
+    chat.set(data)
+    $app.realChats.push($chat)
+    $app.search = { mode: false, value: '' }
   })
 </script>
 

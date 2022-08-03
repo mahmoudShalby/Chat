@@ -4,18 +4,17 @@
 
   export let socket: Socket
 
-  let value: string,
-  lastValue: string
-  $: $app.search = { value, mode: !!value }
-  $: if ($app.search.mode && value !== lastValue) {
+  let lastValue: string
+  $: $app.search.mode = !!$app.search.value
+  $: if ($app.search.mode && $app.search.value !== lastValue) {
     socket.emit('search', $app.search.value)
-    lastValue = value
+    lastValue = $app.search.value
   }
   $: if (!$app.search.mode)
     $app.chats = $app.realChats
 </script>
 
-<input type="text" bind:value placeholder="Search friends or groups">
+<input type="text" bind:value={$app.search.value} placeholder="Search friends or groups">
 
 <style>
   input {

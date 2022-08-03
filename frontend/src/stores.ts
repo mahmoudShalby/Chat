@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 
 
 // Alert
@@ -47,6 +47,7 @@ export const user = writable(<IUser>{
 
 // Chat
 export interface IChat {
+  _id: string
   name: string
   users: IUser[]
   messages: IMessage[]
@@ -55,6 +56,7 @@ export interface IChat {
 }
 
 export const chat = writable(<IChat>{
+  _id: '',
   name: '',
   users: [],
   messages: []
@@ -65,3 +67,12 @@ export interface IMessage {
   content: string
   sender: IUser
 }
+
+// Chat form
+export interface IChatForm {
+  inputValue: string
+}
+
+export const chatForm = writable(<IChatForm>{
+  inputValue: ''
+})

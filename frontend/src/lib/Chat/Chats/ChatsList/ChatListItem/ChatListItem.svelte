@@ -4,8 +4,6 @@
 
   export let socket: Socket,
   name: string
-
-  console.log('name:', name)
 </script>
 
 <div on:click>
@@ -21,7 +19,7 @@
     transition: .3s ease-in-out;
     cursor: pointer;
     border-radius: 15px;
-    font-size: 25px; /* I should remove this after adding the avatar */
+    font-size: 25px; /* I should edit this after adding the avatar */
   }
 
   div:hover {

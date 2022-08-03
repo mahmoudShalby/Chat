@@ -9,7 +9,7 @@
 
 <div>
   <Chats socket={socket} />
-  <Chat />
+  <Chat socket={socket} />
 </div>
 
 <style>

@@ -5,13 +5,14 @@
 
 
   export let socket: Socket,
+  _id: string,
   name: string,
   users: IUser[],
   messages: IMessage[]
 
   function clickHandler() {
-    socket.emit('join chat', )
-    chat.set({ name, users, messages })
+    socket.emit('join chat', _id)
+    chat.set({ _id, name, users, messages })
   }
 </script>
 

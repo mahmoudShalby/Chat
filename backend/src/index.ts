@@ -41,6 +41,8 @@ io.use(async (socket, next) => {
   if (token) {
     try {
       socket.data.user = await User.findById((<decoded><unknown>verifyToken(token)).id)
+      socket.data.user.socketId = socket.id
+      socket.data.user.save()
       socket.data.chats = socket.data.user ? await getChatsByUsername(socket.data.user.username):[]
       return next()
     }
@@ -55,6 +57,12 @@ io.use(async (socket, next) => {
 })
 io.on('connection', socket => {
   socket.emit('setup', { user: { username: socket.data.user.username, socketId: socket.id }, chats: socket.data.chats })
+
+  // socket.on('disconnecting', (reason: string) => {
+  //   // socket.data.user.socketId = ''
+  //   console.log(socket.data.user)
+  //   // socket.data.user.save()
+  // })
 
   const getAuthResult = async () => ({ user: { username: socket.data.user.username, socketId: socket.id }, chats: await getChatsByUsername(socket.data.user.username), token: generateToken({ id: socket.data.user._id })})
   socket.on('auth', async (authMode: 'signup' | 'login', username: string, password: string) => {
@@ -103,12 +111,25 @@ io.on('connection', socket => {
   socket.on('create chat', async (data: { name: string, users: IUser[] }) => {
     const firstUser = await User.findOne({ username: data.users[0].username })
     const secondUser = await User.findOne({ username: data.users[1].username })
-    let result: IChat | null
-    if (firstUser && secondUser)
-      result = await Chat.create({ name: data.name, users: [firstUser._id, secondUser._id] })
+    if (firstUser && secondUser) {
+      const result = new Chat({
+        name: data.name,
+        users: [firstUser._id, secondUser._id]
+      })
+      let new_users: { username: string, socketId: string }[] = []
+      result.users.forEach(async userId => {
+        const user = await User.findById(userId).select('username socketId')
+        if (user) {
+          new_users.push(user)
+          if (result.users[result.users.length-1] === userId)
+            socket.emit('chat created', { _id: result._id, name: result.name, users: new_users, messages: [] })
+        }
+        else
+          socket.emit('chat created', null)
+      })
+    }
     else
-      result = null
-    socket.emit('chat created', result)
+      socket.emit('chat created', null)
   })
 })
 
