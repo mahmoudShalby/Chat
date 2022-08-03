@@ -1,9 +1,7 @@
 <script lang="ts">
   import type { Socket } from 'socket.io-client'
 
-
-  export let socket: Socket,
-  name: string
+  export let name: string
 </script>
 
 <div on:click>

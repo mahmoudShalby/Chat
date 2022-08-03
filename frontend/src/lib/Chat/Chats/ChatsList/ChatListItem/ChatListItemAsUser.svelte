@@ -16,4 +16,4 @@
   }
 </script>
 
-<ChatListItem socket={socket} name={name} on:click={clickHandler} />
+<ChatListItem name={name} on:click={clickHandler} />
